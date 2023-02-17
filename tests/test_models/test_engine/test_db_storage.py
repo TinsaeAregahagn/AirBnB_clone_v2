@@ -1,26 +1,39 @@
 #!/usr/bin/python3
-"""test for databse storage"""
+"""
+    tests for FileStorage
+"""
 import unittest
-import pep8
-import json
-import os
-import MySQLdb
-from models.base_model import BaseModel, Base
+from models.base_model import BaseModel
 from models.engine.db_storage import DBStorage
-from models.user import User
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
+from sqlalchemy.engine.base import Engine
 
 
-class TestDatabaseStorage(unittest.TestCase):
-    '''this will test the database'''
+class test_DBStorage(unittest.TestCase):
+    """
+        Base test class
+    """
+    @classmethod
+    def setUpClass(cls):
+        """
+            setup
+        """
+        cls.dummy = DBStorage()
 
-    def test_pep8_dbstorage(self):
-        """Testing the pep8 linter requirments."""
-        pep8style = pep8.StyleGuide(quiet=True)
-        result = pep8style.check_files(['models/engine/db_storage.py'])
-        self.assertEqual(result.total_errors, 0,
-                         'Found pep8 style errors')
+    @classmethod
+    def tearDownClass(cls):
+        """
+            tear down
+        """
+        del cls.dummy
+
+    def test_attrs(self):
+        """
+            attribute tests
+        """
+        self.assertTrue(hasattr(self.dummy, '_DBStorage__engine'))
+        self.assertTrue(hasattr(self.dummy, '_DBStorage__session'))
+        self.assertTrue(isinstance(self.dummy._DBStorage__engine, Engine))
+        self.assertTrue(self.dummy._DBStorage__session is None)
+
+if __name__ == "__main__":
+    unittest.main()
